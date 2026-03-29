@@ -18,7 +18,9 @@ services:
       PAPERCLIP_DEPLOYMENT_MODE: "authenticated"
       PAPERCLIP_DEPLOYMENT_EXPOSURE: "private"
       PAPERCLIP_PUBLIC_URL: "https://paperclip.40hero.com"
-      # DATABASE_URL, BETTER_AUTH_SECRET injected via Dokploy env vars
+      DATABASE_URL: "${DATABASE_URL}"
+      BETTER_AUTH_SECRET: "${BETTER_AUTH_SECRET}"
+      CLAUDE_CODE_OAUTH_TOKEN: "${CLAUDE_CODE_OAUTH_TOKEN}"
     volumes:
       - paperclip_data:/paperclip
     restart: unless-stopped
