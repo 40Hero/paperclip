@@ -1,0 +1,43 @@
+# Paperclip L4 Agent Coordination — 40Hero deployment
+# Dokploy GitHub source build from 40Hero/paperclip fork
+# Uses Dockerfile.slim (Claude Code only, no Codex/OpenCode)
+# Env vars injected via Dokploy — secrets never in this file
+
+services:
+  paperclip:
+    build:
+      context: .
+      dockerfile: Dockerfile.slim
+    container_name: paperclip
+    environment:
+      HOST: "0.0.0.0"
+      PORT: "3100"
+      SERVE_UI: "true"
+      PAPERCLIP_HOME: "/paperclip"
+      PAPERCLIP_INSTANCE_ID: "default"
+      PAPERCLIP_DEPLOYMENT_MODE: "authenticated"
+      PAPERCLIP_DEPLOYMENT_EXPOSURE: "private"
+      PAPERCLIP_PUBLIC_URL: "https://paperclip.40hero.com"
+      DATABASE_URL: "postgresql://paperclip_app:${PAPERCLIP_DB_PASSWORD}@supabase-db:5432/paperclip"
+      BETTER_AUTH_SECRET: "${BETTER_AUTH_SECRET}"
+      ANTHROPIC_API_KEY: "${ANTHROPIC_API_KEY}"
+    volumes:
+      - paperclip_data:/paperclip
+    restart: unless-stopped
+    networks:
+      - dokploy-network
+      - supabase_default
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.paperclip.rule=Host(`paperclip.40hero.com`)
+      - traefik.http.routers.paperclip.entrypoints=web
+      - traefik.http.services.paperclip.loadbalancer.server.port=3100
+
+volumes:
+  paperclip_data:
+
+networks:
+  dokploy-network:
+    external: true
+  supabase_default:
+    external: true
