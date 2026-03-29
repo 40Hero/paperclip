@@ -18,9 +18,7 @@ services:
       PAPERCLIP_DEPLOYMENT_MODE: "authenticated"
       PAPERCLIP_DEPLOYMENT_EXPOSURE: "private"
       PAPERCLIP_PUBLIC_URL: "https://paperclip.40hero.com"
-      DATABASE_URL: "postgresql://paperclip_app:${PAPERCLIP_DB_PASSWORD}@supabase-db:5432/paperclip"
-      BETTER_AUTH_SECRET: "${BETTER_AUTH_SECRET}"
-      ANTHROPIC_API_KEY: "${ANTHROPIC_API_KEY}"
+      # DATABASE_URL, BETTER_AUTH_SECRET injected via Dokploy env vars
     volumes:
       - paperclip_data:/paperclip
     restart: unless-stopped
